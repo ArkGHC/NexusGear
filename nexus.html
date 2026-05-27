@@ -1,0 +1,187 @@
+<!DOCTYPE html>
+<html lang="es">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Nexus Gear - Catálogo de Próxima Generación</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700&family=Exo+2:wght@300;600&display=swap"
+        rel="stylesheet">
+    <link rel="stylesheet" href="estilos.css">
+</head>
+
+<body>
+
+    <div id="loading" aria-label="Cargando Nexus Gear">
+        <h2 class="logo-text">NEXUS GEAR</h2>
+        <div class="loader-bar" role="progressbar">
+            <div class="loader-progress" id="bar"></div>
+        </div>
+    </div>
+
+    <header>
+        <div class="logo">
+            <span class="logo-text"><i class="fas fa-link"></i> NEXUS GEAR</span>
+        </div>
+        <nav class="user-controls">
+            <div class="icon-btn" onclick="catalogo.toggleModal()" title="Carrito">
+                <i class="fas fa-shopping-cart"></i>
+                <span class="badge" id="cart-count">0</span>
+            </div>
+            <div class="icon-btn" title="Perfil" onclick="window.location.href='Perfil_De_Usuario.html'"
+                style="cursor:pointer;">
+                <i class="fas fa-user"></i>
+            </div>
+        </nav>
+    </header>
+
+    <main>
+        <section class="hero">
+            <h1>Catálogo de Próxima Generación de Nexus</h1>
+            <p>Ecosistema inteligente para tu setup de nivel S1.</p>
+        </section>
+
+        <section class="container">
+            <!-- Barra de búsqueda -->
+            <div class="search-bar" style="margin-bottom: 30px;">
+                <input type="text" id="search-input" placeholder="Buscar productos por nombre, categoría..."
+                    style="width: 100%; padding: 15px; border: 2px solid var(--border-light); border-radius: 30px; font-size: 1rem;">
+            </div>
+
+            <!-- Filtros mejorados -->
+            <div class="filters-wrapper" style="margin-bottom: 30px;">
+                <div class="filters" role="tablist">
+                    <button class="filter-btn active" data-categoria="all">Todos</button>
+                    <button class="filter-btn" data-categoria="audio">Audio</button>
+                    <button class="filter-btn" data-categoria="perifericos">Periféricos</button>
+                    <button class="filter-btn" data-categoria="visual">Visual</button>
+                </div>
+
+                <!-- Filtro de precio -->
+                <div class="price-filter"
+                    style="margin-top: 20px; padding: 15px; background: var(--light-card); border-radius: 15px;">
+                    <h4 style="margin-bottom: 10px;">Rango de precio</h4>
+                    <div style="display: flex; gap: 20px; align-items: center; flex-wrap: wrap;">
+                        <input type="range" id="precio-min" min="0" max="1000" value="0" step="10">
+                        <input type="range" id="precio-max" min="0" max="1000" value="1000" step="10">
+                        <span id="precio-valor" style="font-weight: bold;">$0 - $1000</span>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Grid de productos -->
+            <div class="products-grid" id="catalog">
+                <!-- Productos cargados dinámicamente -->
+            </div>
+
+            <!-- Paginación -->
+            <div id="paginacion" style="margin-top: 40px; text-align: center;"></div>
+        </section>
+    </main>
+
+    <!-- Modal del carrito -->
+    <div class="modal" id="cartModal" onclick="if(event.target===this) catalogo.toggleModal()">
+        <div class="modal-content">
+            <div class="modal-header"
+                style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px;">
+                <h2>🛒 Tu Nexo</h2>
+                <button class="close-btn" onclick="catalogo.toggleModal()"
+                    style="background: none; border: none; font-size: 28px; cursor: pointer;">&times;</button>
+            </div>
+            <div id="cartItems"></div>
+            <div id="cartTotal" class="cart-total"></div>
+            <div id="cartActions" style="margin-top: 20px; display: none;">
+                <button class="btn-buy" onclick="catalogo.clearCart()" style="background: #ff4757;">VACIAR NEXO</button>
+                <button class="btn-buy" onclick="catalogo.checkout()"
+                    style="background: var(--primary); margin-top: 10px;">FINALIZAR COMPRA</button>
+            </div>
+        </div>
+    </div>
+
+    <footer style="background: #0f172a; color: white; padding: 3rem 0 2rem; margin-top: 4rem;">
+        <div class="footer-content">
+            <div class="footer-section">
+                <h3>NEXUS <span style="color: #16a34a;">GEAR</span></h3>
+                <p>Elevando tu setup al siguiente nivel con tecnología de vanguardia. Calidad garantizada en cada
+                    componente.</p>
+            </div>
+            <div class="footer-section">
+                <h4>Enlaces rápidos</h4>
+                <ul>
+                    <li><a href="#">Inicio</a></li>
+                    <li><a href="#">Productos</a></li>
+                    <li><a href="#">Ofertas</a></li>
+                    <li><a href="#">Contacto</a></li>
+                </ul>
+            </div>
+            <div class="footer-section">
+                <h4>Síguenos</h4>
+                <div class="social-links">
+                    <a href="#"><i class="fab fa-facebook"></i></a>
+                    <a href="#"><i class="fab fa-twitter"></i></a>
+                    <a href="#"><i class="fab fa-instagram"></i></a>
+                </div>
+            </div>
+            <!-- MODAL DE GALERÍA MULTIMEDIA -->
+            <div id="galleryModal" class="modal">
+                <div class="modal-content gallery-modal-content">
+                    <div class="modal-header">
+                        <h2 id="galleryProductTitle">Producto</h2>
+                        <button class="close-btn" onclick="catalogo.cerrarGaleria()">&times;</button>
+                    </div>
+
+                    <!-- Galería principal -->
+                    <div class="gallery-container">
+                        <div class="gallery-main">
+                            <img id="galleryMainImage" src="" alt="Vista principal">
+                            <button class="gallery-nav prev" id="galleryPrevBtn">❮</button>
+                            <button class="gallery-nav next" id="galleryNextBtn">❯</button>
+                        </div>
+
+                        <!-- Miniaturas -->
+                        <div class="gallery-thumbnails" id="galleryThumbnails">
+                            <!-- Se generan dinámicamente -->
+                        </div>
+
+                        <!-- Botón de voz para navegar -->
+                        <button class="gallery-voice-btn" id="galleryVoiceBtn">
+                            Navegar por voz
+                        </button>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Indicador de voz (feedback) -->
+            <div id="voiceFeedback"
+                style="position: fixed; bottom: 20px; left: 20px; background: #00a86b; color: white; padding: 8px 16px; border-radius: 20px; font-size: 12px; display: none; z-index: 9999;">
+                Escuchando...
+            </div>
+
+        </div>
+        <div class="footer-bottom">
+            <p>&copy; 2024 Nexus Gear - Todos los derechos reservados</p>
+        </div>
+    </footer>
+
+    <script src="script.js"></script>
+
+    <!-- Botón flotante de asistente de voz -->
+    <button id="voice-assistant-btn" title="Asistente de voz Nexus" style="position: fixed; bottom: 30px; right: 30px; z-index: 9999;
+    background: linear-gradient(45deg, var(--primary), var(--secondary));
+    border: none; color: white; width: 60px; height: 60px; border-radius: 50%;
+    font-size: 24px; cursor: pointer; box-shadow: 0 4px 15px rgba(0,0,0,0.3);
+    display: flex; align-items: center; justify-content: center;">
+        <i class="fas fa-microphone"></i>
+    </button>
+
+    <!-- Feedback de voz -->
+    <div id="voice-feedback"
+        style="position: fixed; bottom: 100px; right: 30px; background: #00a86b; color: white; padding: 8px 16px; border-radius: 20px; font-size: 12px; display: none; z-index: 9999;">
+        Escuchando...
+    </div>
+
+    <script src="script.js"></script>
+</body>
+
+</html>
