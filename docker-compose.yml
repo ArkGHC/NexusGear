@@ -1,0 +1,25 @@
+version: '3'
+services:
+  aimeos:
+    image: aimeos/aimeos
+    ports:
+      - "8080:80"
+    environment:
+      - DB_HOST=db
+      - DB_DATABASE=aimeos
+      - DB_USERNAME=aimeos
+      - DB_PASSWORD=aimeos
+    depends_on:
+      - db
+  db:
+    image: mysql:8.0
+    environment:
+      - MYSQL_DATABASE=aimeos
+      - MYSQL_USER=aimeos
+      - MYSQL_PASSWORD=aimeos
+      - MYSQL_RANDOM_ROOT_PASSWORD=yes
+    volumes:
+      - mysql-data:/var/lib/mysql
+
+volumes:
+  mysql-data:

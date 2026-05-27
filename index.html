@@ -1,0 +1,63 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Nexus Gear | Conecta tu Equipo al Futuro</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700&family=Exo+2:wght@300;600&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="estilos.css">
+</head>
+<body>
+    <header>
+        <div class="logo">
+            <span class="logo-text"><i class="fas fa-link"></i> NEXUS GEAR</span>
+        </div>
+        <nav style="display: flex; gap: 20px; font-weight: bold;">
+            <a href="index.html" style="color: var(--primary); text-decoration: none;">Inicio</a>
+            <a href="nexus.html" style="color: var(--text-dark); text-decoration: none;">Productos</a>
+            <a href="Perfil_De_Usuario.html" style="color: var(--text-dark); text-decoration: none;">Comunidad</a>
+        </nav>
+        <nav class="user-controls">
+            <div class="icon-btn" title="Perfil" onclick="window.location.href='Perfil_De_Usuario.html'">
+                <i class="fas fa-user"></i>
+            </div>
+        </nav>
+    </header>
+
+    <main>
+        <section class="hero">
+            <h1>NEXUS GEAR</h1>
+            <h2 class="gradient-text">CONECTA TU EQUIPO AL FUTURO</h2>
+            <p style="max-width: 600px; margin: 20px auto;">La plataforma definitiva para gamers, creadores y profesionales tech. Ecosistema inteligente con IA y voz.</p>
+            <div style="margin-top: 30px; display: flex; gap: 15px; justify-content: center;">
+                <button class="btn-buy" style="width: auto; padding: 12px 30px;" onclick="window.location.href='nexus.html'">EXPLORAR CATÁLOGO</button>
+            </div>
+        </section>
+
+        <section class="container" style="display: flex; justify-content: space-around; text-align: center; padding: 40px 0; border-top: 1px solid var(--border-light); border-bottom: 1px solid var(--border-light);">
+            <div><h2 style="color: var(--primary);">500+</h2><p>Productos Nexus</p></div>
+            <div><h2 style="color: var(--primary);">15K+</h2><p>Clientes Conectados</p></div>
+            <div><h2 style="color: var(--primary);">4.9 <i class="fas fa-star"></i></h2><p>Valoración</p></div>
+        </section>
+
+        <section class="container">
+            <h2 style="text-align: center; margin-bottom: 30px; font-family: 'Orbitron', monospace;">EXPLORA CATEGORÍAS</h2>
+            <div class="products-grid">
+                <div class="product-card" style="text-align: center; cursor: pointer;" onclick="window.location.href='nexus.html'">
+                    <i class="fas fa-headphones" style="font-size: 3rem; color: var(--primary); margin-bottom: 15px;"></i>
+                    <h3>Audio Nexus</h3><p>85 productos</p>
+                </div>
+                <div class="product-card" style="text-align: center; cursor: pointer;" onclick="window.location.href='nexus.html'">
+                    <i class="fas fa-keyboard" style="font-size: 3rem; color: var(--primary); margin-bottom: 15px;"></i>
+                    <h3>Periféricos</h3><p>120 productos</p>
+                </div>
+                <div class="product-card" style="text-align: center; cursor: pointer;" onclick="window.location.href='nexus.html'">
+                    <i class="fas fa-desktop" style="font-size: 3rem; color: var(--primary); margin-bottom: 15px;"></i>
+                    <h3>Visual Gear</h3><p>65 productos</p>
+                </div>
+            </div>
+        </section>
+    </main>
+</body>
+</html>
