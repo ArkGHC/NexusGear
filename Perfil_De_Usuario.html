@@ -1,992 +1,117 @@
 <!DOCTYPE html>
 <html lang="es">
-
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
-    <title>Nexus | Autenticación + Perfil de Comprador</title>
-    <link href="https://fonts.googleapis.com/css2?family=Inter:opsz,wght@14..32,300;400;500;600;700&display=swap"
-        rel="stylesheet">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Nexus | Autenticación + Perfil</title>
+    <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700&family=Exo+2:wght@300;600&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    <link rel="stylesheet" href="estilos.css">
     <style>
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-        }
-
-        body {
-            font-family: 'Inter', sans-serif;
-            background: #f3f5f7;
-            min-height: 100vh;
-            padding: 1.5rem;
-            color: #1a2634;
-        }
-
-        .nexus-app {
-            max-width: 1300px;
-            margin: 0 auto;
-        }
-
-        /* ========== PANTALLA DE LOGIN / REGISTRO ========== */
-        .gate-container {
-            max-width: 520px;
-            width: 100%;
-            margin: 2rem auto;
-            background: rgba(18, 25, 45, 0.85);
-            backdrop-filter: blur(12px);
-            border-radius: 3rem;
-            border: 1px solid rgba(72, 187, 255, 0.2);
-            box-shadow: 0 25px 45px rgba(0, 0, 0, 0.5);
-            overflow: hidden;
-            color: #eef2ff;
-        }
-
-        .nexus-header {
-            background: linear-gradient(135deg, #0a111f, #03070f);
-            padding: 1.8rem 2rem;
-            text-align: center;
-            border-bottom: 1px solid rgba(0, 255, 255, 0.2);
-        }
-
-        .nexus-header h1 {
-            font-size: 2.2rem;
-            font-weight: 700;
-            background: linear-gradient(120deg, #FFFFFF, #7bc5ff);
-            background-clip: text;
-            -webkit-background-clip: text;
-            color: transparent;
-            display: inline-flex;
-            align-items: center;
-            gap: 12px;
-        }
-
-        .nexus-header p {
-            font-size: 0.85rem;
-            opacity: 0.7;
-            margin-top: 0.5rem;
-        }
-
-        .status-panel {
-            background: rgba(0, 20, 40, 0.6);
-            margin: 1.5rem 1.8rem 0 1.8rem;
-            padding: 0.9rem 1.2rem;
-            border-radius: 2rem;
-            display: flex;
-            align-items: center;
-            justify-content: space-between;
-            flex-wrap: wrap;
-            gap: 12px;
-            border: 1px solid rgba(59, 130, 246, 0.3);
-        }
-
-        .user-greeting {
-            display: flex;
-            align-items: center;
-            gap: 12px;
-            font-weight: 500;
-        }
-
-        .btn-logout {
-            background: rgba(255, 70, 85, 0.2);
-            border: 1px solid rgba(255, 80, 100, 0.5);
-            color: #ffb3bb;
-            padding: 0.5rem 1rem;
-            border-radius: 2rem;
-            font-weight: 500;
-            font-size: 0.8rem;
-            cursor: pointer;
-            transition: 0.2s;
-            display: flex;
-            align-items: center;
-            gap: 8px;
-        }
-
-        .btn-logout:hover {
-            background: rgba(255, 70, 85, 0.5);
-            color: white;
-        }
-
-        .auth-wrapper {
-            padding: 1.8rem 2rem 2rem 2rem;
-        }
-
-        .tabs {
-            display: flex;
-            gap: 0.8rem;
-            margin-bottom: 2rem;
-            border-bottom: 1px solid rgba(72, 187, 255, 0.2);
-            padding-bottom: 0.5rem;
-        }
-
-        .tab-btn {
-            background: transparent;
-            border: none;
-            font-size: 1.1rem;
-            font-weight: 600;
-            padding: 0.6rem 1.2rem;
-            border-radius: 2rem;
-            color: #9ca3cf;
-            cursor: pointer;
-            transition: 0.2s;
-        }
-
-        .tab-btn.active {
-            background: linear-gradient(95deg, #1e2a4a, #0f172f);
-            color: white;
-            box-shadow: 0 2px 8px rgba(0, 160, 255, 0.2);
-            border: 0.5px solid rgba(59, 130, 246, 0.6);
-        }
-
-        .auth-form {
-            display: flex;
-            flex-direction: column;
-            gap: 1.2rem;
-        }
-
-        .input-group {
-            display: flex;
-            align-items: center;
-            background: rgba(5, 12, 24, 0.7);
-            border-radius: 1.5rem;
-            border: 1px solid rgba(59, 130, 246, 0.3);
-            padding: 0.2rem 0.2rem 0.2rem 1rem;
-        }
-
-        .input-group i {
-            color: #5f7fbf;
-            width: 28px;
-        }
-
-        .input-group input,
-        .input-group select {
-            background: transparent;
-            border: none;
-            padding: 0.9rem 0.8rem;
-            width: 100%;
-            color: #f0f3ff;
-            outline: none;
-            font-family: inherit;
-            font-size: 0.95rem;
-        }
-
-        .input-group select {
-            cursor: pointer;
-        }
-
-        .input-group select option {
-            background: #0f172f;
-            color: white;
-        }
-
-        .input-group input::placeholder {
-            color: #6f7b9e;
-        }
-
-        .auth-btn {
-            background: linear-gradient(95deg, #2563eb, #1d4ed8);
-            border: none;
-            padding: 0.9rem;
-            border-radius: 2rem;
-            font-weight: 700;
-            color: white;
-            cursor: pointer;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            gap: 10px;
-            font-size: 1rem;
-            transition: all 0.2s;
-        }
-
-        .auth-btn:hover {
-            transform: scale(0.98);
-            box-shadow: 0 5px 15px rgba(37, 99, 235, 0.4);
-        }
-
-        .auth-btn:disabled {
-            opacity: 0.6;
-            cursor: not-allowed;
-        }
-
-        .message-area {
-            margin-top: 1.2rem;
-            font-size: 0.85rem;
-            text-align: center;
-            padding: 0.5rem;
-            border-radius: 1rem;
-        }
-
-        .message-area.error {
-            color: #ffa6b5;
-            background: rgba(255, 70, 85, 0.15);
-        }
-
-        .message-area.success {
-            color: #a2f5c0;
-            background: rgba(34, 197, 94, 0.15);
-        }
-
-        .footer-note {
-            text-align: center;
-            font-size: 0.7rem;
-            padding: 1rem;
-            opacity: 0.5;
-            border-top: 1px solid rgba(255, 255, 255, 0.05);
-        }
-
-        /* ========== PERFIL MARKETPLACE ========== */
-        .nexus-marketplace {
-            background: #ffffff;
-            border-radius: 24px;
-            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.04), 0 4px 12px rgba(0, 0, 0, 0.03);
-            overflow: hidden;
-            border: 1px solid #e6e9ed;
-            width: 100%;
-        }
-
-        .profile-header {
-            background: #ffffff;
-            padding: 1.5rem 2rem;
-            border-bottom: 1px solid #eef2f5;
-            display: flex;
-            flex-wrap: wrap;
-            justify-content: space-between;
-            align-items: center;
-        }
-
-        .logo-area {
-            display: flex;
-            align-items: center;
-            gap: 8px;
-            font-weight: 600;
-            color: #1c3b4f;
-        }
-
-        .badge-user {
-            background: #f0f2f5;
-            padding: 0.3rem 0.8rem;
-            border-radius: 40px;
-            font-size: 0.75rem;
-        }
-
-        .profile-main {
-            display: flex;
-            flex-wrap: wrap;
-            gap: 2rem;
-            padding: 1.8rem 2rem;
-        }
-
-        .profile-sidebar {
-            flex: 1;
-            min-width: 240px;
-        }
-
-        .profile-content {
-            flex: 2.5;
-            min-width: 260px;
-        }
-
-        .info-card {
-            background: #ffffff;
-            border: 1px solid #eef2f5;
-            border-radius: 14px;
-            padding: 1.2rem 1.3rem;
-            margin-bottom: 1.5rem;
-            box-shadow: 0 1px 2px rgba(0, 0, 0, 0.02);
-        }
-
-        .card-title {
-            font-size: 0.85rem;
-            font-weight: 600;
-            text-transform: uppercase;
-            color: #5d6f83;
-            margin-bottom: 1rem;
-            display: flex;
-            align-items: center;
-            gap: 8px;
-            border-bottom: 1px solid #f0f2f5;
-            padding-bottom: 0.6rem;
-        }
-
-        .avatar-large {
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            text-align: center;
-            margin-bottom: 0.8rem;
-        }
-
-        .avatar-circle {
-            width: 80px;
-            height: 80px;
-            background: #eef2fa;
-            border-radius: 50%;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            margin-bottom: 0.8rem;
-        }
-
-        .avatar-circle i {
-            font-size: 2.8rem;
-            color: #6c86a3;
-        }
-
-        .user-name {
-            font-weight: 700;
-            font-size: 1.2rem;
-            color: #1f3448;
-        }
-
-        .user-member {
-            font-size: 0.7rem;
-            color: #6f8fae;
-            margin-top: 4px;
-        }
-
-        .detail-item {
-            display: flex;
-            align-items: center;
-            gap: 10px;
-            font-size: 0.85rem;
-            margin-bottom: 0.9rem;
-            color: #2c3f55;
-            word-break: break-word;
-        }
-
-        .detail-item i {
-            width: 22px;
-            color: #7c8ea0;
-        }
-
-        .order-item {
-            display: flex;
-            gap: 12px;
-            padding: 0.8rem 0;
-            border-bottom: 1px solid #f0f2f5;
-            align-items: center;
-        }
-
-        .order-icon {
-            width: 36px;
-            height: 36px;
-            background: #f4f7fb;
-            border-radius: 10px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            color: #3483fa;
-        }
-
-        .order-status {
-            margin-left: auto;
-            font-size: 0.7rem;
-            font-weight: 500;
-            color: #00a650;
-            background: #e9f7ef;
-            padding: 0.2rem 0.5rem;
-            border-radius: 30px;
-        }
-
-        .btn-secondary {
-            background: #ffffff;
-            border: 1px solid #cddae9;
-            padding: 0.5rem 1rem;
-            border-radius: 40px;
-            font-size: 0.75rem;
-            font-weight: 500;
-            color: #2c577c;
-            cursor: pointer;
-            display: inline-flex;
-            align-items: center;
-            gap: 6px;
-            transition: 0.1s;
-        }
-
-        .btn-secondary:hover {
-            background: #f5f9ff;
-            border-color: #3483fa;
-        }
-
-        .level-badge {
-            background: linear-gradient(135deg, #f5b042, #e09d32);
-            border-radius: 30px;
-            padding: 4px 12px;
-            font-size: 0.7rem;
-            font-weight: 700;
-            color: white;
-            display: inline-block;
-        }
-
-        .footer-profile {
-            background: #fafbfc;
-            border-top: 1px solid #eef2f5;
-            padding: 1rem 2rem;
-            font-size: 0.7rem;
-            color: #7f95b0;
-            display: flex;
-            justify-content: space-between;
-            flex-wrap: wrap;
-        }
-
-        @media (max-width: 720px) {
-            body {
-                padding: 0.8rem;
-            }
-
-            .profile-main {
-                flex-direction: column;
-                padding: 1.2rem;
-            }
-
-            .gate-container {
-                margin: 1rem auto;
-            }
-        }
-
-        .hidden {
-            display: none;
-        }
-
-        .loading-spinner {
-            display: inline-block;
-            width: 20px;
-            height: 20px;
-            border: 2px solid rgba(255, 255, 255, 0.3);
-            border-radius: 50%;
-            border-top-color: white;
-            animation: spin 0.8s linear infinite;
-        }
-
-        @keyframes spin {
-            to {
-                transform: rotate(360deg);
-            }
-        }
+        .nexus-app { max-width: 1300px; margin: 100px auto; padding: 20px; font-family: 'Exo 2', sans-serif;}
+        .gate-container { max-width: 520px; margin: 2rem auto; background: var(--bg-card); border-radius: 3rem; border: 1px solid var(--primary); box-shadow: var(--neon-glow); overflow: hidden; color: var(--text-main); }
+        .nexus-header { background: var(--bg-main); padding: 1.8rem 2rem; text-align: center; border-bottom: 1px solid var(--border-light); }
+        .nexus-header h1 { font-family: 'Orbitron', monospace; color: var(--primary); text-shadow: var(--neon-glow); }
+        .auth-wrapper { padding: 1.8rem 2rem 2rem 2rem; }
+        .tabs { display: flex; gap: 0.8rem; margin-bottom: 2rem; border-bottom: 1px solid var(--border-light); padding-bottom: 0.5rem; }
+        .tab-btn { background: transparent; border: none; font-size: 1.1rem; font-weight: 600; padding: 0.6rem 1.2rem; border-radius: 2rem; color: var(--text-main); cursor: pointer; transition: 0.2s; }
+        .tab-btn.active { background: var(--secondary); color: var(--bg-main); box-shadow: var(--neon-glow); }
+        .input-group { display: flex; align-items: center; background: var(--bg-main); border-radius: 1.5rem; border: 1px solid var(--secondary); padding: 0.2rem 1rem; margin-bottom: 15px;}
+        .input-group i { color: var(--primary); width: 28px; }
+        .input-group input, .input-group select { background: transparent; border: none; padding: 0.9rem 0.8rem; width: 100%; color: var(--text-title); outline: none; }
+        .auth-btn { background: var(--primary); border: none; padding: 0.9rem; border-radius: 2rem; font-weight: 700; color: var(--bg-main); cursor: pointer; width: 100%; font-family: 'Orbitron', monospace; margin-top: 10px;}
+        .auth-btn:hover { background: #fff; box-shadow: var(--neon-glow); }
+        .profile-header, .info-card { background: var(--bg-card); border: 1px solid var(--border-light); border-radius: 14px; padding: 1.5rem; margin-bottom: 1.5rem; }
+        .nexus-marketplace { width: 100%; }
+        .btn-secondary { background: transparent; border: 1px solid var(--secondary); color: var(--primary); padding: 0.5rem 1rem; border-radius: 20px; cursor: pointer; }
+        .btn-secondary:hover { background: var(--secondary); color: var(--bg-main); }
     </style>
 </head>
-
 <body>
+    <header>
+        <div class="logo">
+            <a href="nexus.html" style="text-decoration: none;"><span class="logo-text"><i class="fas fa-link"></i> NEXUS GEAR</span></a>
+        </div>
+        <nav style="display: flex; gap: 20px; font-weight: bold; margin-left: 20px;">
+            <a href="index.html" style="color: var(--text-main); text-decoration: none;">Inicio</a>
+            <a href="nexus.html" style="color: var(--text-main); text-decoration: none;">Productos</a>
+        </nav>
+    </header>
+
     <div class="nexus-app">
         <div id="dynamicRoot"></div>
     </div>
 
     <script>
         (function () {
-            // ============================================
-            // CONFIGURACIÓN DE API
-            // ============================================
-            const API_URL = 'http://localhost:3000/api';
-
-            // ============================================
-            // GESTIÓN DE USUARIOS (localStorage + API)
-            // ============================================
             const SESSION_KEY = "nexus_current_user";
             const TOKEN_KEY = "nexusToken";
 
             function getCurrentUser() {
                 const raw = localStorage.getItem(SESSION_KEY);
-                if (!raw) return null;
-                try { return JSON.parse(raw); } catch (e) { return null; }
-            }
-
-            function getToken() {
-                return localStorage.getItem(TOKEN_KEY);
-            }
-
-            function logoutUser() {
-                localStorage.removeItem(SESSION_KEY);
-                localStorage.removeItem(TOKEN_KEY);
-                localStorage.removeItem('nexusCart');
-            }
-
-            function updateUserProfile(updatedData) {
-                const current = getCurrentUser();
-                if (!current) return false;
-                const newSession = { ...current, ...updatedData };
-                localStorage.setItem(SESSION_KEY, JSON.stringify(newSession));
-                return true;
-            }
-
-            // ============================================
-            // FUNCIONES DE API
-            // ============================================
-            async function loginUserAPI(email, password) {
-                try {
-                    const response = await fetch(`${API_URL}/login`, {
-                        method: 'POST',
-                        headers: { 'Content-Type': 'application/json' },
-                        body: JSON.stringify({ email, password })
-                    });
-
-                    const data = await response.json();
-
-                    if (!response.ok) {
-                        return { success: false, message: data.error || 'Error al iniciar sesión' };
-                    }
-
-                    // Guardar token y datos de usuario
-                    localStorage.setItem(TOKEN_KEY, data.token);
-                    localStorage.setItem(SESSION_KEY, JSON.stringify(data.user));
-
-                    return { success: true, message: '¡Bienvenido a Nexus!', user: data.user };
-                } catch (error) {
-                    console.error('Error de conexión:', error);
-                    return { success: false, message: 'Error de conexión. Verifica que el servidor esté funcionando.' };
-                }
-            }
-
-            async function registerUserAPI(email, password, fullName, pais, telefono) {
-                try {
-                    const response = await fetch(`${API_URL}/register`, {
-                        method: 'POST',
-                        headers: { 'Content-Type': 'application/json' },
-                        body: JSON.stringify({
-                            email,
-                            password,
-                            nombre_completo: fullName,
-                            pais,
-                            telefono
-                        })
-                    });
-
-                    const data = await response.json();
-
-                    if (!response.ok) {
-                        return { success: false, message: data.error || 'Error al registrarse' };
-                    }
-
-                    return { success: true, message: data.message || '¡Registro exitoso! Ahora inicia sesión.' };
-                } catch (error) {
-                    console.error('Error de conexión:', error);
-                    return { success: false, message: 'Error de conexión. Verifica que el servidor esté funcionando.' };
-                }
-            }
-
-            async function cargarOrdenesUsuario() {
-                const token = getToken();
-                if (!token) return [];
-
-                try {
-                    const response = await fetch(`${API_URL}/ordenes`, {
-                        headers: { 'Authorization': `Bearer ${token}` }
-                    });
-
-                    if (response.ok) {
-                        return await response.json();
-                    }
-                    return [];
-                } catch (error) {
-                    console.error('Error al cargar órdenes:', error);
-                    return [];
-                }
-            }
-
-            // ============================================
-            // LISTA DE PAÍSES
-            // ============================================
-            const paises = [
-                "Argentina", "Bolivia", "Brasil", "Chile", "Colombia", "Costa Rica", "Cuba", "Ecuador",
-                "El Salvador", "España", "Guatemala", "Honduras", "México", "Nicaragua", "Panamá",
-                "Paraguay", "Perú", "República Dominicana", "Uruguay", "Venezuela", "Otro"
-            ];
-
-            // ============================================
-            // RENDERIZADO DE LOGIN/REGISTRO
-            // ============================================
-            let currentTab = "login";
-            const rootEl = document.getElementById("dynamicRoot");
-
-            function showMessageInGate(msg, type) {
-                const msgDiv = document.getElementById("gateDynamicMessage");
-                if (msgDiv) {
-                    msgDiv.textContent = msg;
-                    msgDiv.className = `message-area ${type === "error" ? "error" : "success"}`;
-                    setTimeout(() => {
-                        if (msgDiv) {
-                            msgDiv.textContent = "";
-                            msgDiv.className = "message-area";
-                        }
-                    }, 4000);
-                }
+                return raw ? JSON.parse(raw) : null;
             }
 
             function renderGate() {
-                const loginActive = currentTab === "login";
-                const registerActive = currentTab === "register";
-
-                const paisesOptions = paises.map(p => `<option value="${p}">${p}</option>`).join('');
-
-                const gateHtml = `
+                const html = `
                 <div class="gate-container">
-                    <div class="nexus-header">
-                        <h1><i class="fas fa-link"></i> nexus</h1>
-                        <p>Autenticación segura · Conexión con PostgreSQL</p>
-                    </div>
-                    <div id="gateStatusPanel" class="status-panel">
-                        <div class="user-greeting">
-                            <i class="fas fa-guest"></i>
-                            <div class="greeting-text">Modo invitado · <span>Accede a Nexus</span></div>
-                        </div>
-                        <div style="font-size:0.7rem;"><i class="fas fa-database"></i> PostgreSQL conectado</div>
-                    </div>
+                    <div class="nexus-header"><h1><i class="fas fa-link"></i> NEXUS</h1><p>Autenticación de Sistema</p></div>
                     <div class="auth-wrapper">
-                        <div class="tabs">
-                            <button class="tab-btn ${loginActive ? 'active' : ''}" data-tab="login"><i class="fas fa-key"></i> Iniciar Sesión</button>
-                            <button class="tab-btn ${registerActive ? 'active' : ''}" data-tab="register"><i class="fas fa-user-plus"></i> Crear Cuenta</button>
-                        </div>
-                        ${loginActive ? `
                         <form id="loginFormGate" class="auth-form">
-                            <div class="input-group"><i class="fas fa-envelope"></i><input type="email" id="loginEmail" placeholder="correo@nexus.com" autocomplete="email" required></div>
-                            <div class="input-group"><i class="fas fa-lock"></i><input type="password" id="loginPassword" placeholder="Contraseña" autocomplete="current-password" required></div>
-                            <button type="submit" class="auth-btn" id="loginSubmitBtn"><i class="fas fa-arrow-right-to-bracket"></i> Ingresar a Nexus</button>
+                            <div class="input-group"><i class="fas fa-envelope"></i><input type="email" id="loginEmail" placeholder="correo@nexus.com" required></div>
+                            <div class="input-group"><i class="fas fa-lock"></i><input type="password" id="loginPassword" placeholder="Contraseña" required></div>
+                            <button type="submit" class="auth-btn">Ingresar a Nexus</button>
                         </form>
-                        ` : `
-                        <form id="registerFormGate" class="auth-form">
-                            <div class="input-group"><i class="fas fa-user"></i><input type="text" id="regFullName" placeholder="Nombre completo" autocomplete="name" required></div>
-                            <div class="input-group"><i class="fas fa-envelope"></i><input type="email" id="regEmail" placeholder="Correo electrónico" autocomplete="email" required></div>
-                            <div class="input-group"><i class="fas fa-lock"></i><input type="password" id="regPassword" placeholder="Contraseña (mín. 4 caracteres)" autocomplete="new-password" required minlength="4"></div>
-                            <div class="input-group"><i class="fas fa-globe-americas"></i>
-                                <select id="regPais" required>
-                                    <option value="" disabled selected>Selecciona tu país</option>
-                                    ${paisesOptions}
-                                </select>
-                            </div>
-                            <div class="input-group"><i class="fas fa-phone-alt"></i><input type="tel" id="regTelefono" placeholder="Número de teléfono (ej: +54 11 1234-5678)" autocomplete="tel" required></div>
-                            <button type="submit" class="auth-btn" id="registerSubmitBtn"><i class="fas fa-user-check"></i> Registrar en Nexus</button>
-                        </form>
-                        `}
-                        <div id="gateDynamicMessage" class="message-area"></div>
                     </div>
-                    <div class="footer-note">
-                        <i class="fas fa-shield-alt"></i> Conexión segura PostgreSQL · Tus datos protegidos
-                    </div>
-                </div>
-            `;
-                rootEl.innerHTML = gateHtml;
+                </div>`;
+                document.getElementById("dynamicRoot").innerHTML = html;
 
-                // Eventos tabs
-                document.querySelectorAll(".tab-btn").forEach(btn => {
-                    btn.addEventListener("click", (e) => {
-                        const tab = btn.getAttribute("data-tab");
-                        currentTab = tab === "register" ? "register" : "login";
-                        renderGate();
-                    });
+                document.getElementById("loginFormGate").addEventListener("submit", (e) => {
+                    e.preventDefault();
+                    const email = document.getElementById("loginEmail").value;
+                    const user = { email: email, nombre_completo: email.split('@')[0], nivel: 'elite' };
+                    localStorage.setItem(SESSION_KEY, JSON.stringify(user));
+                    localStorage.setItem(TOKEN_KEY, "simulated-token-xyz");
+                    renderFullApp();
                 });
-
-                // Evento login
-                if (loginActive) {
-                    const loginForm = document.getElementById("loginFormGate");
-                    const submitBtn = document.getElementById("loginSubmitBtn");
-
-                    if (loginForm) {
-                        loginForm.addEventListener("submit", async (e) => {
-                            e.preventDefault();
-
-                            const email = document.getElementById("loginEmail").value.trim();
-                            const password = document.getElementById("loginPassword").value;
-
-                            if (!email || !password) {
-                                showMessageInGate("Completa todos los campos", "error");
-                                return;
-                            }
-
-                            if (submitBtn) {
-                                submitBtn.disabled = true;
-                                submitBtn.innerHTML = '<span class="loading-spinner"></span> Conectando...';
-                            }
-
-                            const result = await loginUserAPI(email, password);
-
-                            if (submitBtn) {
-                                submitBtn.disabled = false;
-                                submitBtn.innerHTML = '<i class="fas fa-arrow-right-to-bracket"></i> Ingresar a Nexus';
-                            }
-
-                            if (result.success) {
-                                showMessageInGate("¡Bienvenido a Nexus! Redirigiendo...", "success");
-                                setTimeout(() => renderFullApp(), 800);
-                            } else {
-                                showMessageInGate(result.message, "error");
-                            }
-                        });
-                    }
-                } else {
-                    const regForm = document.getElementById("registerFormGate");
-                    const submitBtn = document.getElementById("registerSubmitBtn");
-
-                    if (regForm) {
-                        regForm.addEventListener("submit", async (e) => {
-                            e.preventDefault();
-
-                            const fullName = document.getElementById("regFullName").value.trim();
-                            const email = document.getElementById("regEmail").value.trim();
-                            const password = document.getElementById("regPassword").value;
-                            const pais = document.getElementById("regPais").value;
-                            const telefono = document.getElementById("regTelefono").value.trim();
-
-                            if (!email || !password || !pais || !telefono) {
-                                showMessageInGate("Completa todos los campos obligatorios", "error");
-                                return;
-                            }
-
-                            if (password.length < 4) {
-                                showMessageInGate("La contraseña debe tener al menos 4 caracteres", "error");
-                                return;
-                            }
-
-                            const emailRegex = /^[^\s@]+@([^\s@]+\.)+[^\s@]+$/;
-                            if (!emailRegex.test(email)) {
-                                showMessageInGate("Ingresa un correo electrónico válido", "error");
-                                return;
-                            }
-
-                            if (submitBtn) {
-                                submitBtn.disabled = true;
-                                submitBtn.innerHTML = '<span class="loading-spinner"></span> Registrando...';
-                            }
-
-                            const result = await registerUserAPI(email, password, fullName, pais, telefono);
-
-                            if (submitBtn) {
-                                submitBtn.disabled = false;
-                                submitBtn.innerHTML = '<i class="fas fa-user-check"></i> Registrar en Nexus';
-                            }
-
-                            if (result.success) {
-                                showMessageInGate(result.message + " Ahora inicia sesión.", "success");
-                                currentTab = "login";
-                                setTimeout(() => renderGate(), 1500);
-                            } else {
-                                showMessageInGate(result.message, "error");
-                            }
-                        });
-                    }
-                }
             }
 
-            // ============================================
-            // PERFIL MARKETPLACE
-            // ============================================
-            async function renderMarketplaceProfile(user) {
-                if (!user) return;
-
-                const displayName = user.nombre_completo || user.fullName || user.displayName || user.email.split('@')[0];
-                const memberDate = user.createdAt || user.created_at ?
-                    new Date(user.createdAt || user.created_at).toLocaleDateString('es-ES', {
-                        year: 'numeric', month: 'long', day: 'numeric'
-                    }) : "2024";
-                const email = user.email;
-                const pais = user.pais || "México";
-                const telefono = user.telefono || "+52 55 1234-5678";
-                const totalPurchases = user.total_compras || user.totalPurchases || 5;
-
-                // Nivel dinámico según compras
-                let nivel = user.nivel || "Nexus Plata";
-                let nivelIcono = "⭐";
-                if (totalPurchases > 20) {
-                    nivel = "Nexus Oro";
-                    nivelIcono = "🌟";
-                }
-                if (totalPurchases > 50) {
-                    nivel = "Nexus Diamante";
-                    nivelIcono = "💎";
-                }
-
-                // Cargar órdenes reales
-                const ordenes = await cargarOrdenesUsuario();
-                const ordenesRecientes = ordenes.slice(0, 3);
-
-                const profileHtml = `
+            function renderMarketplaceProfile(user) {
+                const html = `
                 <div class="nexus-marketplace">
-                    <div class="profile-header">
-                        <div class="logo-area">
-                            <i class="fas fa-store"></i>
-                            <span>Nexus Market</span>
-                            <span style="font-size:0.7rem; background:#eef2f5; padding:2px 8px; border-radius:30px;">comprador</span>
+                    <div class="profile-header" style="display:flex; justify-content:space-between; align-items:center;">
+                        <h2 style="color: var(--primary); font-family: 'Orbitron', monospace;">PANEL DE CONTROL</h2>
+                        <button class="btn-secondary" id="logoutBtn">Cerrar Sesión</button>
+                    </div>
+                    <div style="display:flex; gap: 20px; flex-wrap: wrap;">
+                        <div class="info-card" style="flex:1; min-width: 250px;">
+                            <h3 style="color: var(--text-title);"><i class="fas fa-user-circle"></i> ${user.nombre_completo}</h3>
+                            <p>Email: ${user.email}</p>
+                            <p style="margin-top:10px; color: var(--primary);">Nivel: ${user.nivel.toUpperCase()}</p>
                         </div>
-                        <div class="badge-user">
-                            <i class="fas fa-database"></i> PostgreSQL · 
-                            <i class="fas fa-user-check"></i> Verificado
+                        <div class="info-card" style="flex:2; min-width: 300px;">
+                            <h3 style="color: var(--text-title); margin-bottom: 15px;"><i class="fas fa-history"></i> Historial de Nexus</h3>
+                            <p>No hay pedidos recientes en este dispositivo.</p>
+                            <button class="auth-btn" style="width: auto; padding: 10px 20px; margin-top: 15px;" onclick="window.location.href='nexus.html'">Ir de compras</button>
                         </div>
                     </div>
-                    <div class="profile-main">
-                        <div class="profile-sidebar">
-                            <div class="info-card">
-                                <div class="avatar-large">
-                                    <div class="avatar-circle"><i class="fas fa-user-circle"></i></div>
-                                    <div class="user-name">${escapeHtml(displayName)}</div>
-                                    <div class="user-member">Miembro desde ${memberDate}</div>
-                                </div>
-                                <div class="detail-item"><i class="fas fa-globe-americas"></i> <span>${escapeHtml(pais)}</span></div>
-                                <div class="detail-item"><i class="fas fa-phone-alt"></i> <span>${escapeHtml(telefono)}</span></div>
-                                <div class="detail-item"><i class="fas fa-envelope"></i> <span>${escapeHtml(email)}</span></div>
-                                <div class="detail-item" style="justify-content: space-between; margin-top: 8px;">
-                                    <span>🏆 Nivel Nexus</span>
-                                    <span class="level-badge">${nivel} ${nivelIcono}</span>
-                                </div>
-                                <div class="detail-item" style="justify-content: space-between;">
-                                    <span><i class="fas fa-shopping-bag"></i> Completadas</span>
-                                    <span style="font-weight:700;">${totalPurchases} compras</span>
-                                </div>
-                                <button class="btn-secondary" style="margin-top:1rem; width:100%; justify-content:center;" id="editProfileAction">
-                                    <i class="fas fa-edit"></i> Editar perfil
-                                </button>
-                            </div>
-                            <div class="info-card">
-                                <div class="card-title"><i class="fas fa-credit-card"></i> Métodos de pago</div>
-                                <div class="detail-item"><i class="fab fa-cc-visa"></i> <span>Visa terminada en 4532</span></div>
-                                <div class="detail-item"><i class="fab fa-cc-mastercard"></i> <span>Mastercard · 7890</span></div>
-                                <button class="btn-secondary"><i class="fas fa-plus-circle"></i> Agregar método</button>
-                            </div>
-                        </div>
-                        <div class="profile-content">
-                            <div class="info-card">
-                                <div class="card-title"><i class="fas fa-truck"></i> Últimos pedidos</div>
-                                ${ordenesRecientes.length > 0 ? ordenesRecientes.map(orden => `
-                                    <div class="order-item">
-                                        <div class="order-icon"><i class="fas fa-box"></i></div>
-                                        <div class="order-details">
-                                            <p>Orden #${orden.id}</p>
-                                            <span>${new Date(orden.created_at).toLocaleDateString('es-ES')} · $${orden.total}</span>
-                                        </div>
-                                        <div class="order-status">${orden.estado}</div>
-                                    </div>
-                                `).join('') : `
-                                    <div class="order-item">
-                                        <div class="order-icon"><i class="fas fa-headphones"></i></div>
-                                        <div class="order-details">
-                                            <p>Auriculares Bluetooth Sony WH-CH510</p>
-                                            <span>Comprado hace 5 días · $42.900</span>
-                                        </div>
-                                        <div class="order-status">Entregado</div>
-                                    </div>
-                                    <div class="order-item">
-                                        <div class="order-icon"><i class="fas fa-mug-hot"></i></div>
-                                        <div class="order-details">
-                                            <p>Set de tazas térmicas - x6</p>
-                                            <span>Comprado el 28 mar · $18.750</span>
-                                        </div>
-                                        <div class="order-status">En camino</div>
-                                    </div>
-                                `}
-                                <button class="btn-secondary" onclick="window.location.href='nexus.html'">
-                                    <i class="fas fa-shopping-cart"></i> Ir al catálogo
-                                </button>
-                            </div>
-                            <div class="info-card">
-                                <div class="card-title"><i class="fas fa-heart"></i> Productos que te interesan</div>
-                                <div style="display:flex; flex-direction:column; gap:10px;">
-                                    <div style="display:flex; justify-content: space-between;">
-                                        <span><i class="fas fa-headphones"></i> Audífonos Nexus Pro</span>
-                                        <span>$299.00</span>
-                                    </div>
-                                    <div style="display:flex; justify-content: space-between;">
-                                        <span><i class="fas fa-keyboard"></i> Teclado Mecánico Neón</span>
-                                        <span>$150.00</span>
-                                    </div>
-                                    <div style="display:flex; justify-content: space-between;">
-                                        <span><i class="fas fa-desktop"></i> Monitor Ultraancho 34"</span>
-                                        <span>$899.00</span>
-                                    </div>
-                                </div>
-                                <hr style="margin: 12px 0; border-color:#eceff4;">
-                                <div style="font-size:0.75rem;"><i class="fas fa-bell"></i> Activar alertas de precios</div>
-                            </div>
-                            <div class="info-card">
-                                <div class="card-title"><i class="fas fa-gift"></i> Beneficios Nexus+</div>
-                                <div style="display:flex; gap:8px; flex-wrap:wrap;">
-                                    <span style="background:#f5f8fe; padding:6px 12px; border-radius:30px;">
-                                        <i class="fas fa-shipping-fast"></i> Envío gratis
-                                    </span>
-                                    <span style="background:#f5f8fe; padding:6px 12px; border-radius:30px;">
-                                        <i class="fas fa-percent"></i> 5% off en electrónicos
-                                    </span>
-                                </div>
-                                <div class="detail-item" style="margin-top:12px;">
-                                    <i class="fas fa-shield-alt"></i> 
-                                    <span>Protección Nexus: reembolso en 48hs</span>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="footer-profile">
-                        <span><i class="far fa-clock"></i> Última actividad: ${new Date().toLocaleTimeString('es-ES', { hour: '2-digit', minute: '2-digit' })} hs</span>
-                        <span><i class="fas fa-sign-out-alt" id="logoutFromMarket" style="cursor:pointer;"></i> Cerrar sesión</span>
-                    </div>
-                </div>
-            `;
-                rootEl.innerHTML = profileHtml;
-
-                // Logout
-                const logoutBtn = document.getElementById("logoutFromMarket");
-                if (logoutBtn) {
-                    logoutBtn.addEventListener("click", () => {
-                        logoutUser();
-                        renderFullApp();
-                    });
-                }
-
-                // Editar perfil
-                const editBtn = document.getElementById("editProfileAction");
-                if (editBtn) {
-                    editBtn.addEventListener("click", () => {
-                        const newName = prompt("Editar nombre mostrado:", displayName);
-                        const newPais = prompt("Editar país:", pais);
-                        const newTelefono = prompt("Editar número de teléfono:", telefono);
-                        const updates = {};
-                        if (newName && newName.trim()) updates.nombre_completo = newName.trim();
-                        if (newPais && newPais.trim()) updates.pais = newPais.trim();
-                        if (newTelefono && newTelefono.trim()) updates.telefono = newTelefono.trim();
-                        if (Object.keys(updates).length > 0) {
-                            updateUserProfile(updates);
-                            renderFullApp();
-                        }
-                    });
-                }
-
-                // Prevenir acciones de botones secundarios demo
-                document.querySelectorAll('.btn-secondary').forEach(btn => {
-                    if (btn.id !== 'editProfileAction') {
-                        btn.addEventListener('click', (e) => {
-                            if (!btn.onclick || btn.onclick.toString().includes('window.location')) return;
-                            e.preventDefault();
-                        });
-                    }
-                });
-            }
-
-            function escapeHtml(str) {
-                if (!str) return "";
-                return str.replace(/[&<>]/g, function (m) {
-                    if (m === '&') return '&amp;';
-                    if (m === '<') return '&lt;';
-                    if (m === '>') return '&gt;';
-                    return m;
+                </div>`;
+                document.getElementById("dynamicRoot").innerHTML = html;
+                document.getElementById("logoutBtn").addEventListener("click", () => {
+                    localStorage.removeItem(SESSION_KEY);
+                    localStorage.removeItem(TOKEN_KEY);
+                    renderFullApp();
                 });
             }
 
             function renderFullApp() {
                 const currentUser = getCurrentUser();
-                if (currentUser) {
-                    renderMarketplaceProfile(currentUser);
-                } else {
-                    renderGate();
-                }
+                if (currentUser) renderMarketplaceProfile(currentUser);
+                else renderGate();
             }
 
-            // Escuchar cambios en localStorage desde otras pestañas
-            window.addEventListener("storage", (e) => {
-                if (e.key === SESSION_KEY || e.key === TOKEN_KEY) {
-                    renderFullApp();
-                }
-            });
-
-            // Iniciar la aplicación
             renderFullApp();
         })();
     </script>
 </body>
-
 </html>
