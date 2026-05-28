@@ -7,7 +7,7 @@
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
     <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700&family=Exo+2:wght@300;600&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="estilos.css">
-    <link rel="stylesheet" href="css/producto.css">
+    <link rel="stylesheet" href="producto.css">
 </head>
 <body>
     <header>
@@ -17,9 +17,11 @@
             </a>
         </div>
         <nav class="user-controls">
-            <div class="icon-btn" onclick="window.location.href='nexus.html'"><i class="fas fa-arrow-left"></i> Volver</div>
-            <div class="icon-btn" id="cartIconBtn"><i class="fas fa-shopping-cart"></i><span class="badge" id="cart-count">0</span></div>
-            <div class="icon-btn" onclick="window.location.href='Perfil_De_Usuario.html'"><i class="fas fa-user"></i></div>
+            <div class="icon-btn" onclick="window.location.href='nexus.html'" title="Volver al catálogo"><i class="fas fa-arrow-left"></i></div>
+            <div class="icon-btn" onclick="catalogo.toggleModal()" title="Carrito">
+                <i class="fas fa-shopping-cart"></i><span class="badge" id="cart-count">0</span>
+            </div>
+            <div class="icon-btn" onclick="window.location.href='Perfil_De_Usuario.html'" title="Perfil"><i class="fas fa-user"></i></div>
         </nav>
     </header>
 
@@ -46,12 +48,31 @@
             <button class="btn-add-cart-detail" id="addToCartBtnDetail"><i class="fas fa-cart-plus"></i> AÑADIR AL CARRITO</button>
         </div>
     </main>
+
+    <div class="modal" id="cartModal" onclick="if(event.target===this) catalogo.toggleModal()">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h2>🛒 Tu Nexo</h2>
+                <button class="close-btn" onclick="catalogo.toggleModal()">&times;</button>
+            </div>
+            <div id="cartItems"></div>
+            <div id="cartTotal" class="cart-total"></div>
+            <div id="cartActions" style="margin-top: 20px; display: none;">
+                <button class="btn-buy" onclick="catalogo.clearCart()" style="background: #ff4757;">VACIAR NEXO</button>
+                <button class="btn-buy" onclick="catalogo.checkout()">FINALIZAR COMPRA</button>
+            </div>
+        </div>
+    </div>
+
     <script src="script.js"></script>
-    <script src="js/producto.js"></script>
+    <script src="producto.js"></script>
     <script>
         document.addEventListener("DOMContentLoaded", () => {
             const producto = JSON.parse(localStorage.getItem("productoSeleccionado"));
-            if (!producto) return;
+            if (!producto) {
+                document.querySelector(".product-title-detail").innerText = "Producto no encontrado";
+                return;
+            }
             document.querySelector(".product-title-detail").innerText = producto.name;
             document.querySelector(".current-price").innerText = "$" + producto.price;
             document.querySelector(".product-description").innerText = producto.description;

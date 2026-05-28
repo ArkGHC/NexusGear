@@ -97,3 +97,35 @@ footer { background: var(--bg-card); color: var(--text-main); padding: 3rem 0 2r
     .products-grid { grid-template-columns: repeat(auto-fill, minmax(240px, 1fr)); gap: 15px; }
     .filters { overflow-x: auto; flex-wrap: nowrap; padding-bottom: 10px; }
 }
+
+/* =======================================================
+   REGLAS RESPONSIVE (Móviles y Tablets) 
+======================================================= */
+@media (max-width: 900px) {
+    /* Ajustes generales */
+    .hero { padding-top: 120px; }
+    .hero h1 { font-size: 2.2rem; }
+    .container { padding: 20px; }
+    
+    /* El header colapsa elegantemente */
+    header { flex-direction: column; padding: 10px; gap: 10px; }
+    header nav { margin-left: 0 !important; width: 100%; justify-content: center; }
+    .user-controls { justify-content: center; width: 100%; margin-top: 5px; }
+
+    /* Filtros tipo scroll horizontal */
+    .filters-wrapper { display: flex; flex-direction: column; }
+    .filters { overflow-x: auto; flex-wrap: nowrap; padding-bottom: 10px; justify-content: flex-start; scrollbar-width: thin; }
+    .filter-btn { flex-shrink: 0; }
+    
+    /* Grid a 2 o 1 columna dependiendo del ancho */
+    .products-grid { grid-template-columns: repeat(auto-fill, minmax(200px, 1fr)); gap: 15px; }
+}
+
+@media (max-width: 500px) {
+    /* Teléfonos pequeños */
+    .hero h1 { font-size: 1.8rem; }
+    .products-grid { grid-template-columns: 1fr; } /* 1 sola columna en celular */
+    .modal-content { width: 95%; padding: 20px; }
+    .footer-content { grid-template-columns: 1fr; text-align: center; }
+    .social-links { justify-content: center; }
+}

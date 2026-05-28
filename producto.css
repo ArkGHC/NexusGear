@@ -30,3 +30,19 @@
 .spec-card { background: var(--bg-card); padding: 25px; border-radius: 20px; text-align: center; border: 1px solid var(--border-light); }
 .spec-card i { font-size: 2.5rem; color: var(--primary); margin-bottom: 15px; }
 .spec-card h3 { color: var(--text-title); }
+
+/* =======================================================
+   REGLAS RESPONSIVE PARA DETALLE DE PRODUCTO
+======================================================= */
+@media (max-width: 900px) {
+    .product-detail-container { 
+        grid-template-columns: 1fr; /* Pasa de 2 columnas a 1 */
+        gap: 30px; 
+        margin-top: 160px; /* Más espacio por el header colapsado */
+        padding: 0 15px;
+    }
+    .product-title-detail { font-size: 1.8rem; }
+    .current-price { font-size: 2rem; }
+    .full-specs-section { padding: 0 15px; margin-top: 40px; }
+    .specs-grid { grid-template-columns: 1fr; }
+}
