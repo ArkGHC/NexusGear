@@ -1,18 +1,18 @@
-version: '3'
 services:
-  aimeos:
-    image: aimeos/aimeos
+  aimeos-core:
+    image: php:8.2-apache
+    container_name: nexus_aimeos_backend
     ports:
       - "8080:80"
     environment:
       - DB_HOST=db
       - DB_DATABASE=aimeos
-      - DB_USERNAME=aimeos
-      - DB_PASSWORD=aimeos
     depends_on:
       - db
+
   db:
     image: mysql:8.0
+    container_name: nexus_database
     environment:
       - MYSQL_DATABASE=aimeos
       - MYSQL_USER=aimeos
