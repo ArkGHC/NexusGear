@@ -428,3 +428,23 @@ document.addEventListener('DOMContentLoaded', () => {
         }
     }, 100);
 });
+
+
+/**
+ * Módulo de Carrito de Compras: Gestiona la persistencia de productos 
+ * seleccionados dentro de la base de datos simulada en LocalStorage.
+ */
+function agregarAlCarrito(productoId, nombre, precio) {
+    let db = JSON.parse(localStorage.getItem('nexus_gear_db'));
+    
+    // Si no existe la propiedad carrito en la DB, la creamos
+    if (!db.carrito) db.carrito = [];
+
+    // Añadimos el producto al carrito
+    db.carrito.push({ productoId, nombre, precio, fecha: new Date().toISOString() });
+    
+    // Guardamos el cambio en la base de datos central
+    localStorage.setItem('nexus_gear_db', JSON.stringify(db));
+    
+    alert(`¡${nombre} añadido al Nexus Cart!`);
+}
