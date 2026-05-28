@@ -17,11 +17,15 @@
             </a>
         </div>
         <nav class="user-controls">
-            <div class="icon-btn" onclick="window.location.href='nexus.html'" title="Volver al catálogo"><i class="fas fa-arrow-left"></i></div>
-            <div class="icon-btn" onclick="catalogo.toggleModal()" title="Carrito">
+            <div class="icon-btn" onclick="window.location.href='nexus.html'" title="Volver al catálogo">
+                <i class="fas fa-arrow-left"></i>
+            </div>
+            <div class="icon-btn" onclick="if(window.catalogo) catalogo.toggleModal()" title="Carrito">
                 <i class="fas fa-shopping-cart"></i><span class="badge" id="cart-count">0</span>
             </div>
-            <div class="icon-btn" onclick="window.location.href='Perfil_De_Usuario.html'" title="Perfil"><i class="fas fa-user"></i></div>
+            <div class="icon-btn" onclick="window.location.href='Perfil_De_Usuario.html'" title="Perfil">
+                <i class="fas fa-user"></i>
+            </div>
         </nav>
     </header>
 
@@ -40,43 +44,98 @@
                 <div class="spec-mini-item"><i class="fas fa-microchip"></i> Alta fidelidad</div>
                 <div class="spec-mini-item"><i class="fas fa-bolt"></i> Conexión Rápida</div>
             </div>
+            
             <div class="quantity-selector-detail">
                 <button id="decQtyBtn">−</button>
                 <input type="number" id="qtyInput" value="1" min="1" max="10">
                 <button id="incQtyBtn">+</button>
             </div>
+            
             <button class="btn-add-cart-detail" id="addToCartBtnDetail"><i class="fas fa-cart-plus"></i> AÑADIR AL CARRITO</button>
         </div>
     </main>
 
-    <div class="modal" id="cartModal" onclick="if(event.target===this) catalogo.toggleModal()">
+    <div class="modal" id="cartModal" onclick="if(event.target===this && window.catalogo) catalogo.toggleModal()">
         <div class="modal-content">
             <div class="modal-header">
                 <h2>🛒 Tu Nexo</h2>
-                <button class="close-btn" onclick="catalogo.toggleModal()">&times;</button>
+                <button class="close-btn" onclick="if(window.catalogo) catalogo.toggleModal()">&times;</button>
             </div>
             <div id="cartItems"></div>
             <div id="cartTotal" class="cart-total"></div>
             <div id="cartActions" style="margin-top: 20px; display: none;">
-                <button class="btn-buy" onclick="catalogo.clearCart()" style="background: #ff4757;">VACIAR NEXO</button>
-                <button class="btn-buy" onclick="catalogo.checkout()">FINALIZAR COMPRA</button>
+                <button class="btn-buy" onclick="if(window.catalogo) catalogo.clearCart()" style="background: #ff4757;">VACIAR NEXO</button>
+                <button class="btn-buy" onclick="if(window.catalogo) catalogo.checkout()">FINALIZAR COMPRA</button>
             </div>
         </div>
     </div>
 
     <script src="script.js"></script>
-    <script src="producto.js"></script>
+    
     <script>
         document.addEventListener("DOMContentLoaded", () => {
+            // 1. Mostrar la info del producto guardado en la memoria
             const producto = JSON.parse(localStorage.getItem("productoSeleccionado"));
             if (!producto) {
                 document.querySelector(".product-title-detail").innerText = "Producto no encontrado";
                 return;
             }
+            
             document.querySelector(".product-title-detail").innerText = producto.name;
             document.querySelector(".current-price").innerText = "$" + producto.price;
             document.querySelector(".product-description").innerText = producto.description;
             document.getElementById("mainProductImage").src = `https://picsum.photos/seed/${producto.id}1/600/600`;
+
+            // 2. Lógica de los botones + y -
+            const qtyInput = document.getElementById('qtyInput');
+            const decBtn = document.getElementById('decQtyBtn');
+            const incBtn = document.getElementById('incQtyBtn');
+
+            if (decBtn && incBtn && qtyInput) {
+                decBtn.addEventListener('click', () => { 
+                    let val = parseInt(qtyInput.value); 
+                    if (val > 1) qtyInput.value = val - 1; 
+                });
+                
+                incBtn.addEventListener('click', () => { 
+                    let val = parseInt(qtyInput.value); 
+                    if (val < parseInt(qtyInput.max)) qtyInput.value = val + 1; 
+                });
+            }
+
+            // 3. Lógica para añadir al carrito
+            const addToCartBtn = document.getElementById('addToCartBtnDetail');
+            if (addToCartBtn) {
+                addToCartBtn.addEventListener('click', () => {
+                    // Verificamos que la clase del catálogo se haya cargado desde script.js
+                    if (typeof catalogo === 'undefined') {
+                        alert("Error de conexión con el carrito. Refresca la página.");
+                        return;
+                    }
+                    
+                    const cantidad = parseInt(qtyInput.value) || 1;
+                    
+                    // Añadimos el producto tantas veces como indique el input
+                    for(let i = 0; i < cantidad; i++) {
+                        catalogo.agregarAlCarrito(producto.id, addToCartBtn);
+                    }
+                    
+                    // Efecto visual de éxito
+                    const originalText = addToCartBtn.innerHTML;
+                    addToCartBtn.innerHTML = '<i class="fas fa-check"></i> ¡AÑADIDO AL NEXO!';
+                    addToCartBtn.style.background = 'var(--secondary)';
+                    
+                    setTimeout(() => {
+                        addToCartBtn.innerHTML = '<i class="fas fa-cart-plus"></i> AÑADIR AL CARRITO';
+                        addToCartBtn.style.background = 'var(--primary)';
+                    }, 2000);
+                });
+            }
+            
+            // Actualizar el numerito rojo del carrito al cargar la página
+            if(typeof catalogo !== 'undefined') {
+                catalogo.actualizarContadorCarrito();
+            }
         });
     </script>
 </body>
